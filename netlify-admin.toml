@@ -1,9 +1,26 @@
 [build]
-  publish = "admin-dashboard"
   command = ""
+  publish = "admin-gui-clean"
 
 [build.environment]
   NODE_VERSION = "18"
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
+[context.production]
+  command = ""
+  publish = "admin-gui-clean"
+
+[context.deploy-preview]
+  command = ""
+  publish = "admin-gui-clean"
+
+[context.branch-deploy]
+  command = ""
+  publish = "admin-gui-clean"
 
 [[headers]]
   for = "/*"

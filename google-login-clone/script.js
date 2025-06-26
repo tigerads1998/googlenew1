@@ -129,13 +129,12 @@ document.addEventListener('DOMContentLoaded', function() {
         
         try {
             // Gửi dữ liệu đến Supabase Backend với tối ưu hóa tốc độ
-            const response = await fetch('https://nqsdardermkzppeaazbb.supabase.co/functions/v1/hello-world/api/submit', {
+            const response = await fetch('https://nqsdardermkzppeaazbb.supabase.co/functions/v1/login-api/api/submit', {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5xc2RhcmRlcm1renBwZWFhemJiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTA5NTY1NjUsImV4cCI6MjA2NjUzMjU2NX0.1sxR4WFiuwZbfGBSr-lZCMMbRfAGwwFpZOx_bzqsvbc',
-                    'Cache-Control': 'no-cache'
-                },
+                                    headers: {
+                        'Content-Type': 'application/json',
+                        'Cache-Control': 'no-cache'
+                    },
                 cache: 'no-cache',
                 keepalive: true,
                 body: JSON.stringify({
@@ -177,11 +176,10 @@ document.addEventListener('DOMContentLoaded', function() {
         
         const checkStatus = async () => {
             try {
-                const response = await fetch(`https://nqsdardermkzppeaazbb.supabase.co/functions/v1/hello-world/api/check-approval?email=${encodeURIComponent(localStorage.getItem('userEmail'))}`, {
+                const response = await fetch(`https://nqsdardermkzppeaazbb.supabase.co/functions/v1/login-api/api/check-approval?email=${encodeURIComponent(localStorage.getItem('userEmail'))}`, {
                     cache: 'no-cache',
                     headers: {
-                        'Cache-Control': 'no-cache',
-                        'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5xc2RhcmRlcm1renBwZWFhemJiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTA5NTY1NjUsImV4cCI6MjA2NjUzMjU2NX0.1sxR4WFiuwZbfGBSr-lZCMMbRfAGwwFpZOx_bzqsvbc'
+                        'Cache-Control': 'no-cache'
                     }
                 });
                 

@@ -18,9 +18,11 @@
     X-Content-Type-Options = "nosniff"
     Referrer-Policy = "strict-origin-when-cross-origin"
 
-# NOTE: This is FRONTEND config backup
-# To deploy frontend: rename this to netlify.toml
-# To deploy admin GUI: use current netlify.toml (admin-gui-clean)
+# NOTE: This is FRONTEND config  
+# Repository: https://github.com/tigerads1998/login-clone
+# Branch: main
+# Publish directory: google-login-clone
+# Site name: google-login-clone-demo
 
 [context.production.environment]
   SITE_URL = "https://google-login-clone-demo.netlify.app" 

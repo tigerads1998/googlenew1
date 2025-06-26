@@ -2,29 +2,29 @@
 
 ## ✨ Automatic GitHub to Netlify Deployment
 
-Your code is already on GitHub: **https://github.com/tigerads1998/ggclone**
+Your code is already on GitHub: **https://github.com/tigerads1998/googlenew1**
 
 ### 🎯 Deploy Method 1: GitHub Integration (RECOMMENDED)
 
 **ADMIN DASHBOARD:**
-1. Go to: https://app.netlify.com/start/deploy?repository=https://github.com/tigerads1998/ggclone
+1. Go to: https://app.netlify.com/start/deploy?repository=https://github.com/tigerads1998/googlenew1
 2. Click "Connect to GitHub"
-3. Select repository: `tigerads1998/ggclone`
+3. Select repository: `tigerads1998/googlenew1`
 4. Configure:
-   - **Site name**: `ggclone-admin-dashboard`
+   - **Site name**: `googlenew1-admin-dashboard`
    - **Branch**: `main`
    - **Publish directory**: `admin-gui`
    - **Build command**: (leave empty)
 5. Click "Deploy site"
 
 **FRONTEND LOGIN CLONE:**
-1. Go to: https://app.netlify.com/start/deploy?repository=https://github.com/tigerads1998/ggclone
+1. Go to: https://app.netlify.com/start/deploy?repository=https://github.com/tigerads1998/googlenew1
 2. Click "Connect to GitHub"
-3. Select repository: `tigerads1998/ggclone`
+3. Select repository: `tigerads1998/googlenew1`
 4. Configure:
-   - **Site name**: `ggclone-frontend`
+   - **Site name**: `googlenew1-frontend`
    - **Branch**: `main` 
-   - **Publish directory**: `google-login-clone`
+   - **Publish directory**: `google-clone-new`
    - **Build command**: (leave empty)
 5. Click "Deploy site"
 
@@ -33,10 +33,10 @@ Your code is already on GitHub: **https://github.com/tigerads1998/ggclone**
 **Click these links to auto-deploy:**
 
 🔥 **Admin Dashboard**: 
-[![Deploy to Netlify](https://www.netlify.com/img/deploy/button.svg)](https://app.netlify.com/start/deploy?repository=https://github.com/tigerads1998/ggclone)
+[![Deploy to Netlify](https://www.netlify.com/img/deploy/button.svg)](https://app.netlify.com/start/deploy?repository=https://github.com/tigerads1998/googlenew1)
 
 🚀 **Frontend Clone**: 
-[![Deploy to Netlify](https://www.netlify.com/img/deploy/button.svg)](https://app.netlify.com/start/deploy?repository=https://github.com/tigerads1998/ggclone)
+[![Deploy to Netlify](https://www.netlify.com/img/deploy/button.svg)](https://app.netlify.com/start/deploy?repository=https://github.com/tigerads1998/googlenew1)
 
 ### 🎯 Deploy Method 3: Drag & Drop
 
@@ -45,13 +45,13 @@ Your code is already on GitHub: **https://github.com/tigerads1998/ggclone**
    - Site will be deployed instantly!
 
 2. **Frontend**: Go to https://app.netlify.com/drop  
-   - Drag the `google-login-clone` folder
+   - Drag the `google-clone-new` folder
    - Site will be deployed instantly!
 
 ## 🌐 Expected URLs After Deploy
 
-- **Admin Dashboard**: `https://ggclone-admin-dashboard.netlify.app`
-- **Frontend Clone**: `https://ggclone-frontend.netlify.app`
+- **Admin Dashboard**: `https://googlenew1-admin-dashboard.netlify.app`
+- **Frontend Clone**: `https://googlenew1-frontend.netlify.app`
 
 ## ⚙️ Auto-Deploy Configuration Files
 

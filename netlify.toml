@@ -1,8 +1,8 @@
-# Netlify Configuration for ggclone repository
-# This will deploy the google-login-clone folder by default
+# Netlify Configuration for googlenew1 repository
+# This will deploy the google-clone-new folder by default
 
 [build]
-  publish = "google-login-clone"
+  publish = "google-clone-new"
 
 [[redirects]]
   from = "/*"

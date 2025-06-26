@@ -1,5 +1,8 @@
+# Netlify Configuration for Frontend (Google Login Clone)
+# Deploy this for the main Google login interface
+
 [build]
-  publish = "google-login-clone"
+  publish = "google-clone-new"
 
 [[redirects]]
   from = "/*"
@@ -9,7 +12,7 @@
 [build.environment]
   NODE_VERSION = "18"
 
-# Headers for security
+# Security headers for production
 [[headers]]
   for = "/*"
   [headers.values]
@@ -17,6 +20,13 @@
     X-XSS-Protection = "1; mode=block"
     X-Content-Type-Options = "nosniff"
     Referrer-Policy = "strict-origin-when-cross-origin"
+    Cache-Control = "public, max-age=0, must-revalidate"
+
+# Cache static assets
+[[headers]]
+  for = "*.css"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
 
 # NOTE: This is FRONTEND config  
 # Repository: https://github.com/tigerads1998/login-clone

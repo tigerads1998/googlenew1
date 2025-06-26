@@ -1,6 +1,6 @@
 [build]
   command = ""
-  publish = "admin-gui-clean"
+  publish = "admin-gui"
 
 [build.environment]
   NODE_VERSION = "18"
@@ -12,15 +12,15 @@
 
 [context.production]
   command = ""
-  publish = "admin-gui-clean"
+  publish = "admin-gui"
 
 [context.deploy-preview]
   command = ""
-  publish = "admin-gui-clean"
+  publish = "admin-gui"
 
 [context.branch-deploy]
   command = ""
-  publish = "admin-gui-clean"
+  publish = "admin-gui"
 
 [[headers]]
   for = "/*"

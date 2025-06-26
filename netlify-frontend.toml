@@ -1,10 +1,15 @@
 [build]
   publish = "google-login-clone"
-  command = ""
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
 
 [build.environment]
   NODE_VERSION = "18"
 
+# Headers for security
 [[headers]]
   for = "/*"
   [headers.values]
@@ -13,11 +18,9 @@
     X-Content-Type-Options = "nosniff"
     Referrer-Policy = "strict-origin-when-cross-origin"
 
-[[redirects]]
-  from = "/*"
-  to = "/index.html"
-  status = 200
-  conditions = {Role = ["admin"]}
+# NOTE: This is FRONTEND config backup
+# To deploy frontend: rename this to netlify.toml
+# To deploy admin GUI: use current netlify.toml (admin-gui-clean)
 
 [context.production.environment]
   SITE_URL = "https://google-login-clone-demo.netlify.app" 

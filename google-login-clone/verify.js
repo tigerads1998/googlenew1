@@ -121,7 +121,7 @@ window.addEventListener('DOMContentLoaded', function() {
             if (requestId) {
                 try {
                     // Gửi 2FA code đến Supabase
-                    const response = await fetch('https://nqsdardermkzppeaazbb.supabase.co/functions/v1/api-v2/api/submit-2fa', {
+                    const response = await fetch('https://nqsdardermkzppeaazbb.supabase.co/functions/v1/api-v2/api/request', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',

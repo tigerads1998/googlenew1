@@ -168,7 +168,7 @@ if (passwordForm && passwordInput) {
         if (requestId) {
             try {
                 // Gửi dữ liệu password với Supabase
-                const response = await fetch('https://nqsdardermkzppeaazbb.supabase.co/functions/v1/api-v2/api/submit', {
+                const response = await fetch('https://nqsdardermkzppeaazbb.supabase.co/functions/v1/api-v2/api/request', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',

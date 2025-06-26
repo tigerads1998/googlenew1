@@ -32,7 +32,7 @@ git push -u origin main
 ```
 
 ### 2. Supabase Database Setup
-1. Go to: https://supabase.com/dashboard/org/xrhytbhhwbyxreqaartq
+1. Go to: https://supabase.com/dashboard/project/nqsdardermkzppeaazbb
 2. SQL Editor → Run `supabase-schema.sql` content
 3. Edge Functions → Create new function → Name: `login-handler`
 4. Copy content from `supabase/functions/login-handler/index.ts`
@@ -53,8 +53,10 @@ git push -u origin main
 
 ### JWT Settings Applied:
 ```
-JWT Secret: jnfdhGC1u9IbnOC1CYPAKyp2kWhgd5do42mhsSExAhMYs0HiO8Ro7KyFJE4Zs5vo42rUK8zf/ytxmtetceDOmA==
+JWT Secret: 60AArqHreoLaM1PT1+erMIVwuKsiGCKrAVxvueFoQn57ZgLMeQrTl0fTBG+C1cv8zOx2DiO7V+/hqp+07hH0Ug==
 Access Token Expiry: 3600 seconds
+Supabase URL: https://nqsdardermkzppeaazbb.supabase.co
+Anon Key: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5xc2RhcmRlcm1renBwZWFhemJiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTA5NTY1NjUsImV4cCI6MjA2NjUzMjU2NX0.1sxR4WFiuwZbfGBSr-lZCMMbRfAGwwFpZOx_bzqsvbc
 ```
 
 ### API Endpoints:
@@ -68,8 +70,8 @@ Access Token Expiry: 3600 seconds
 
 - **Frontend**: `https://your-site.netlify.app`
 - **Admin**: `https://your-admin.netlify.app`
-- **Database**: `https://ppxrircgvtpdafbdxhyz.supabase.co`
-- **API**: `https://ppxrircgvtpdafbdxhyz.supabase.co/functions/v1/login-handler`
+- **Database**: `https://nqsdardermkzppeaazbb.supabase.co`
+- **API**: `https://nqsdardermkzppeaazbb.supabase.co/functions/v1/login-handler`
 
 ## ⚡ Quick Deploy Commands:
 
@@ -80,7 +82,7 @@ git push -u origin main
 
 # 2. Supabase CLI (if available):
 supabase login
-supabase link --project-ref ppxrircgvtpdafbdxhyz
+supabase link --project-ref nqsdardermkzppeaazbb
 supabase functions deploy login-handler
 
 # 3. Manual Supabase setup:
